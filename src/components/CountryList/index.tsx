@@ -1,46 +1,27 @@
 import "./style.scss";
 
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { SyntheticEvent, useContext, useEffect, useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 
 import CountryCard from "../CountryCard";
+import { CountryContext } from "../../contexts/CountryContext";
 
 const CountryList: React.FC = () => {
   const [countryName, setCountryName] = useState("");
   const [queryOffset, setQueryOffset] = useState(0);
-  const COUNTRIES_QUERY = gql`
-    query countriesQuery($offset: Int) {
-      Country(first: 10, offset: $offset) {
-        _id
-        name
-        nameTranslations(offset: 4, first: 1) {
-          value
-          languageCode
-        }
-        capital
-        flag {
-          emoji
-        }
-      }
-    }
-  `;
-  const { loading, error, data, fetchMore } = useQuery(COUNTRIES_QUERY, {
-    variables: { offset: queryOffset },
-  });
 
-  const [countries, setCountries] = useState([]);
+  const { countries, isLoading } = useContext(CountryContext);
+  const [shownCountries, setShownCountries] = useState(countries || []);
 
   useEffect(() => {
-    window.addEventListener("scroll", loadMore);
-  }, []);
+    setShownCountries(countries);
+  }, [countries]);
+
+  //Funcionalidade de Scroll infinito
 
   function loadMore() {
     setQueryOffset(queryOffset + 10);
-    fetchMore({
-      variables: { page: queryOffset },
-    });
   }
-
   const handleScroll = (e: any) => {
     if (e) {
       const hasReachedBottom =
@@ -51,17 +32,21 @@ const CountryList: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    window.addEventListener("scroll", loadMore);
+  }, []);
+  //
+
   const handleSearchCountry = (searchValue: string) => {
     setCountryName(searchValue);
-    setCountries([]);
-    fetchMore({
-      variables: { page: 0, countryName: countryName },
-    });
+    if (countries) {
+      setShownCountries(
+        countries.filter((country: any) =>
+          country.translations.por.common.includes(searchValue)
+        )
+      );
+    }
   };
-
-  React.useEffect(() => {
-    data && setCountries((oldValues): any => [...oldValues, ...data.Country]);
-  }, [data]);
 
   return (
     <div className="countryListContainer">
@@ -72,11 +57,11 @@ const CountryList: React.FC = () => {
         onChange={(e) => handleSearchCountry(e.target.value)}
       />
       <div className="countryList" onScroll={(e) => handleScroll(e)}>
-        {loading && <h4>Carregando...</h4>}
-        {countries &&
-          countries.map((country) => (
-            <CountryCard key={country} country={country} />
-          ))}
+        {isLoading && <h4>Carregando...</h4>}
+        {shownCountries &&
+          shownCountries
+            .slice(0, queryOffset + 10)
+            .map((country) => <CountryCard key={country} country={country} />)}
       </div>
       <button onClick={() => loadMore()}>Carregar mais países</button>
     </div>
