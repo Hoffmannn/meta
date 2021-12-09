@@ -1,8 +1,11 @@
 import "./style.scss";
 
+import { Card, Spinner } from "react-bootstrap";
 import { CountryContext, countryData } from "../../../contexts/CountryContext";
 import { Link, useLocation } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
+
+import Button from "react-bootstrap/button";
 
 const Country: React.FC = () => {
   const { countries, updateCountries } = useContext(CountryContext);
@@ -63,73 +66,95 @@ const Country: React.FC = () => {
   return (
     <>
       <Link to="/">
-        <button>Voltar</button>
+        <Button variant="light" className="button">
+          Voltar
+        </Button>
       </Link>
       {!isDataEditable ? (
-        <button onClick={() => setIsDataEditable(true)}>Editar dados</button>
+        <Button
+          variant="light"
+          className="button"
+          onClick={() => setIsDataEditable(true)}
+        >
+          Editar dados
+        </Button>
       ) : (
-        <button onClick={() => handleSaveNewData()}>Salvar dados</button>
+        <Button
+          variant="light"
+          className="button"
+          onClick={() => handleSaveNewData()}
+        >
+          Salvar dados
+        </Button>
       )}
 
       {Object.keys(country).length > 0 ? (
         <>
           {!isDataEditable ? (
-            <div>
-              <h2 className="countryName">
-                País: {countryTranslatedName} <img src={country.flags.png} />
-              </h2>
-              <h2>Capital: {country.capital ? capital : "Sem capital"}</h2>
-              <h2>Área (km²): {area}</h2>
-              <h2>População: {population}</h2>
-              <h2>Top Level Domain: {tld}</h2>
-            </div>
+            <Card className="countryContainer">
+              <Card.Img src={country.flags.png} className="countryFlag" />
+              <Card.Title className="countryName">
+                País: {countryTranslatedName}
+              </Card.Title>
+              <Card.Body>
+                <p>Capital: {country.capital ? capital : "Sem capital"}</p>
+                <p>Área (km²): {area}</p>
+                <p>População: {population}</p>
+                <p>Top Level Domain: {tld}</p>
+              </Card.Body>
+            </Card>
           ) : (
-            <div>
-              <h2>
+            <Card className="countryContainer">
+              <Card.Img src={country.flags.png} className="countryFlag" />
+              <Card.Title className="countryName">
                 País:{" "}
                 <input
                   type="text"
                   value={countryTranslatedName}
                   onChange={(e) => setCountryTranslatedName(e.target.value)}
                 />
-              </h2>
-              <h2>
-                Capital:{" "}
-                <input
-                  type="text"
-                  value={capital}
-                  onChange={(e) => setCapital(e.target.value)}
-                />
-              </h2>
-              <h2>
-                Área (km²):{" "}
-                <input
-                  type="number"
-                  value={area}
-                  onChange={(e) => setArea(parseInt(e.target.value))}
-                />
-              </h2>
-              <h2>
-                População:{" "}
-                <input
-                  type="number"
-                  value={population}
-                  onChange={(e) => setPopulation(parseInt(e.target.value))}
-                />
-              </h2>
-              <h2>
-                Top Level Domain:{" "}
-                <input
-                  type="text"
-                  value={tld}
-                  onChange={(e) => setTld(e.target.value)}
-                />
-              </h2>
-            </div>
+              </Card.Title>
+              <Card.Body>
+                <p>
+                  Capital:{" "}
+                  <input
+                    type="text"
+                    value={capital}
+                    onChange={(e) => setCapital(e.target.value)}
+                  />
+                </p>
+                <p>
+                  Área (km²):{" "}
+                  <input
+                    type="number"
+                    value={area}
+                    onChange={(e) => setArea(parseInt(e.target.value))}
+                  />
+                </p>
+                <p>
+                  População:{" "}
+                  <input
+                    type="number"
+                    value={population}
+                    onChange={(e) => setPopulation(parseInt(e.target.value))}
+                  />
+                </p>
+                <p>
+                  Top Level Domain:{" "}
+                  <input
+                    type="text"
+                    value={tld}
+                    onChange={(e) => setTld(e.target.value)}
+                  />
+                </p>
+              </Card.Body>
+            </Card>
           )}
         </>
       ) : (
-        <h2>Carregando...</h2>
+        <Spinner animation="border" role="status" className="spinner">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
       )}
     </>
   );

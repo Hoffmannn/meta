@@ -2,8 +2,10 @@ import "./style.scss";
 
 import React, { useContext, useEffect, useState } from "react";
 
+import Button from "react-bootstrap/Button";
 import CountryCard from "../CountryCard";
 import { CountryContext } from "../../contexts/CountryContext";
+import { Spinner } from "react-bootstrap";
 
 const CountryList: React.FC = () => {
   const [countryName, setCountryName] = useState("");
@@ -65,16 +67,31 @@ const CountryList: React.FC = () => {
         onChange={(e) => handleSearchCountry(e.target.value)}
       />
       <div className="countryList" onScroll={(e) => handleScroll(e)}>
-        {isLoading && <h4>Carregando...</h4>}
-        {shownCountries &&
-          shownCountries
-            .slice(0, queryOffset + 10)
-            .map((country) => (
-              <CountryCard key={country.name} country={country} />
-            ))}
+        {isLoading ? (
+          <Spinner animation="border" role="status" className="spinner">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        ) : (
+          <>
+            {shownCountries &&
+              shownCountries
+                .slice(0, queryOffset + 10)
+                .map((country) => (
+                  <CountryCard key={country.name} country={country} />
+                ))}
+          </>
+        )}
       </div>
-      <button onClick={() => loadMore()}>Carregar mais países</button>
-      <button onClick={() => fetchCountries()}>Resetar informações</button>
+      <Button className="button" variant="light" onClick={() => loadMore()}>
+        Carregar mais países
+      </Button>
+      <Button
+        className="button"
+        variant="light"
+        onClick={() => fetchCountries()}
+      >
+        Resetar informações
+      </Button>
     </div>
   );
 };
