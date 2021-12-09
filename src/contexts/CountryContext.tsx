@@ -59,7 +59,7 @@ export const CountryProvider: React.FC = ({ children }) => {
     const savedCountries = JSON.parse(
       localStorage.getItem("countries") as string
     ) as countryData[];
-    if (savedCountries.length > 0) {
+    if (savedCountries && savedCountries.length > 0) {
       setCountries(savedCountries);
       setIsLoading(false);
       return;
