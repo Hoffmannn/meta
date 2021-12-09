@@ -1,8 +1,6 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import api from "./api";
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test("API retorna os dados de países", async () => {
+  const countries = await api.get("/all").then((res) => res.data);
+  expect(countries.length).toBeGreaterThan(0);
 });
