@@ -42,7 +42,16 @@ const CountryList: React.FC = () => {
     if (countries) {
       setShownCountries(
         countries.filter((country: any) =>
-          country.translations.por.common.includes(searchValue)
+          country.translations.por.common
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .includes(
+              searchValue
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase()
+            )
         )
       );
     }
