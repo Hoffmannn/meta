@@ -1,11 +1,9 @@
 import "./style.scss";
 
-import { Card, Spinner } from "react-bootstrap";
-import { CountryContext, countryData } from "../../../contexts/CountryContext";
+import { Button, Card, Spinner } from "react-bootstrap";
+import { CountryContext, countryData } from "../../contexts/CountryContext";
 import { Link, useLocation } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
-
-import Button from "react-bootstrap/button";
 
 const Country: React.FC = () => {
   const { countries, updateCountries } = useContext(CountryContext);

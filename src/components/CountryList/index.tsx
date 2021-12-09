@@ -1,11 +1,10 @@
 import "./style.scss";
 
+import { Button, Spinner } from "react-bootstrap";
 import React, { useContext, useEffect, useState } from "react";
 
-import Button from "react-bootstrap/Button";
 import CountryCard from "../CountryCard";
 import { CountryContext } from "../../contexts/CountryContext";
-import { Spinner } from "react-bootstrap";
 
 const CountryList: React.FC = () => {
   const [countryName, setCountryName] = useState("");
