@@ -6,7 +6,7 @@ export type countryData = {
   name: {
     common: string;
   };
-  flag: string;
+  flags: { png: string; svg: string };
   capital: string[];
   area: number;
   population: number;

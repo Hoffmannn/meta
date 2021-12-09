@@ -1,3 +1,5 @@
+import "./style.scss";
+
 import { CountryContext, countryData } from "../../../contexts/CountryContext";
 import { Link, useLocation } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
@@ -73,8 +75,8 @@ const Country: React.FC = () => {
         <>
           {!isDataEditable ? (
             <div>
-              <h2>
-                País: {countryTranslatedName} {country.flag}
+              <h2 className="countryName">
+                País: {countryTranslatedName} <img src={country.flags.png} />
               </h2>
               <h2>Capital: {country.capital ? capital : "Sem capital"}</h2>
               <h2>Área (km²): {area}</h2>
