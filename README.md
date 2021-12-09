@@ -21,5 +21,5 @@ Roda os testes unitários.
 
 ### `yarn build`
 
-Constrói uma build do app para produção na pasta `build`.\
+Constrói uma build do app para produção na pasta `build`.
 
