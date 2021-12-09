@@ -10,7 +10,7 @@ const CountryList: React.FC = () => {
   const [countryName, setCountryName] = useState("");
   const [queryOffset, setQueryOffset] = useState(0);
 
-  const { countries, isLoading } = useContext(CountryContext);
+  const { countries, isLoading, fetchCountries } = useContext(CountryContext);
   const [shownCountries, setShownCountries] = useState(countries || []);
 
   useEffect(() => {
@@ -70,9 +70,12 @@ const CountryList: React.FC = () => {
         {shownCountries &&
           shownCountries
             .slice(0, queryOffset + 10)
-            .map((country) => <CountryCard key={country} country={country} />)}
+            .map((country) => (
+              <CountryCard key={country.name} country={country} />
+            ))}
       </div>
       <button onClick={() => loadMore()}>Carregar mais países</button>
+      <button onClick={() => fetchCountries()}>Resetar informações</button>
     </div>
   );
 };

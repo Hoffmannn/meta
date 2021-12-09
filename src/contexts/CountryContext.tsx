@@ -22,7 +22,8 @@ type CountryContextProps = {
   isLoading: boolean;
   setIsLoading: (boolean: boolean) => void;
   countries: countryData[];
-  setCountries: (countries: any) => void;
+  fetchCountries: () => void;
+  updateCountries: (countries: countryData[]) => void;
 };
 
 export const CountryContext = createContext({} as CountryContextProps);
@@ -31,23 +32,51 @@ export const CountryProvider: React.FC = ({ children }) => {
   const [countries, setCountries] = useState([] as countryData[]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchCountries = async () => {
+    setIsLoading(true);
     try {
-      api.get("/all").then((res) => {
-        setCountries(
-          res.data.sort((a: any, b: any) =>
-            a.translations.por.common.localeCompare(b.translations.por.common)
-          )
+      await api.get("/all").then((res) => {
+        const countriesResponse = res.data.sort((a: any, b: any) =>
+          a.translations.por.common.localeCompare(b.translations.por.common)
         );
+        setCountries(countriesResponse);
         setIsLoading(false);
+
+        localStorage.setItem("countries", JSON.stringify(countriesResponse));
       });
     } catch (error) {
+      setIsLoading(false);
       console.error(error);
     }
+  };
+
+  const updateCountries = (countries: countryData[]) => {
+    setCountries(countries);
+    localStorage.setItem("countries", JSON.stringify(countries));
+  };
+
+  useEffect(() => {
+    const savedCountries = JSON.parse(
+      localStorage.getItem("countries") as string
+    ) as countryData[];
+    if (savedCountries.length > 0) {
+      setCountries(savedCountries);
+      setIsLoading(false);
+      return;
+    }
+
+    fetchCountries();
   }, []);
+
   return (
     <CountryContext.Provider
-      value={{ countries, setCountries, isLoading, setIsLoading }}
+      value={{
+        countries,
+        isLoading,
+        setIsLoading,
+        updateCountries,
+        fetchCountries,
+      }}
     >
       {children}
     </CountryContext.Provider>

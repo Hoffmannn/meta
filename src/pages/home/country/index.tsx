@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
 
 const Country: React.FC = () => {
-  const { countries, setCountries } = useContext(CountryContext);
+  const { countries, updateCountries } = useContext(CountryContext);
   const [isDataEditable, setIsDataEditable] = useState(false);
   const [country, setCountry] = useState({} as countryData);
   const [countryTranslatedName, setCountryTranslatedName] = useState("");
@@ -53,7 +53,7 @@ const Country: React.FC = () => {
       translations: { por: { common: countryTranslatedName } },
     };
 
-    setCountries(newCountries);
+    updateCountries(newCountries);
 
     setIsDataEditable(false);
   };
