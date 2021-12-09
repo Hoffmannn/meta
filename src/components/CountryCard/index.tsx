@@ -1,7 +1,6 @@
 import "./style.scss";
 
 import { Link } from "react-router-dom";
-import React from "react";
 
 const CountryCard = ({ country }: any) => {
   return (

@@ -1,7 +1,6 @@
 import "./style.scss";
 
-import React, { SyntheticEvent, useContext, useEffect, useState } from "react";
-import { gql, useQuery } from "@apollo/client";
+import React, { useContext, useEffect, useState } from "react";
 
 import CountryCard from "../CountryCard";
 import { CountryContext } from "../../contexts/CountryContext";
